@@ -38,7 +38,7 @@ fn main() {
     let mut kill_count: u32 = 0;
     let start_time = Instant::now();
 
-    let elapsed_time = start_time.elapsed();
+    // let elapsed_time = start_time.elapsed();
 
     let mut last_enemy_spawn_time = Instant::now();
     let enemy_spawn_interval = Duration::new(1, 0);
