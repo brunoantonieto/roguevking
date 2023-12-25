@@ -13,11 +13,12 @@ pub struct Enemy {
     dy: i32,
     pub health: i32,
     pub current_weapon: Box<dyn Weapon>,
-    pub is_alive: bool
+    pub is_alive: bool,
+    pub spawn_rate: u32,
 }
 
 impl Enemy {
-    pub fn new(x: i32, y: i32) -> Self {
+    pub fn new(x: i32, y: i32, spawn_rate: u32) -> Self {
         let mut rng = thread_rng();
         Enemy {
             rect: Rect::new(x, y, 50, 50),
@@ -26,6 +27,7 @@ impl Enemy {
             health: 10,
             current_weapon: Box::new(Sword::new()),
             is_alive: true,
+            spawn_rate,
         }
     }
 

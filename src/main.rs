@@ -29,10 +29,11 @@ fn main() {
     // Game objects
     let mut player: Player = Player::new(50, 50);
     let mut key_inputs = KeyInputs::new();
-    let mut enemies = vec![
-        Enemy::new(100, 100),
-        Enemy::new(200, 200),
-    ];
+    let mut enemies = Vec::new();
+
+    let mut last_enemy_spawn_time = Instant::now();
+    let enemy_spawn_interval = Duration::new(1, 0);
+
 
     let mut last_print_time = Instant::now();
     let print_interval = Duration::new(1, 0);
@@ -46,11 +47,16 @@ fn main() {
                 _ => key_inputs.update(&event),
             }
         }
+        if last_enemy_spawn_time.elapsed() >= enemy_spawn_interval {
+            // Spawn a new enemy every second
+            enemies.push(Enemy::new(rand::random::<i32>() % 800, rand::random::<i32>() % 600, 1));
+            last_enemy_spawn_time = Instant::now();
+        }
         let mut collision_occurred = false;
         player.update(&key_inputs);
 
         for enemy in enemies.iter_mut() {
-            enemy.update(player.rect.x(), player.rect.y()); // Update enemy positions
+            enemy.update(player.rect.x(), player.rect.y());
             if enemy.is_alive {
                 if let Some(weapon) = player.weapon() {
                     if check_collision(weapon.rect(player.rect.x(), player.rect.y()), enemy.rect()) {

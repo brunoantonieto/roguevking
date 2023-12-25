@@ -19,7 +19,7 @@ impl Player {
     pub fn new(x: i32, y: i32) -> Self {
         Player {
             rect: Rect::new(x, y, 25, 25),
-            speed: 5,
+            speed: 10,
             health: 10,
             current_weapon: Box::new(Sword::new()),
         }
@@ -38,8 +38,6 @@ impl Player {
         if key_inputs.right {
             self.rect.set_x(self.rect.x() + self.speed);
         }
-
-        // self.current_weapon.set_position(self.rect.x(), self.rect.y());
 
     }
 
