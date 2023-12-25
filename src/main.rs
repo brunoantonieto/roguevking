@@ -20,7 +20,7 @@ fn main() {
 
     let ttf_context = sdl2::ttf::init().unwrap();
 
-    let window = video_subsystem.window("Viking Game", 800, 600)
+    let window = video_subsystem.window("rogue vking", 800, 600)
         .position_centered()
         .build()
         .unwrap();
