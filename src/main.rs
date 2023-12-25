@@ -50,7 +50,7 @@ fn main() {
         player.update(&key_inputs);
 
         for enemy in enemies.iter_mut() {
-            enemy.update(); // Update enemy positions
+            enemy.update(player.rect.x(), player.rect.y()); // Update enemy positions
             if enemy.is_alive {
                 if let Some(weapon) = player.weapon() {
                     if check_collision(weapon.rect(player.rect.x(), player.rect.y()), enemy.rect()) {

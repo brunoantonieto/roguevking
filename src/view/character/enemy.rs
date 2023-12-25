@@ -29,16 +29,11 @@ impl Enemy {
         }
     }
 
-    pub fn update(&mut self) {
+    pub fn update(&mut self, player_x: i32, player_y: i32) {
+        self.set_direction_towards_player(player_x, player_y);
+
         self.rect.set_x(self.rect.x() + self.dx);
         self.rect.set_y(self.rect.y() + self.dy);
-
-        // Randomize movement occasionally
-        let mut rng = thread_rng();
-        if rng.gen_range(0..100) < 5 { // 5% chance to change direction
-            self.dx = rng.gen_range(-2..=2);
-            self.dy = rng.gen_range(-2..=2);
-        }
     }
 
     pub fn render(&self, canvas: &mut Canvas<Window>) {
@@ -50,6 +45,17 @@ impl Enemy {
         if self.health <= 0 {
             self.is_alive = false;
         }
+    }
+
+    pub fn set_direction_towards_player(&mut self, player_x: i32, player_y: i32) {
+        let direction_x = player_x - self.rect.x();
+        let direction_y = player_y - self.rect.y();
+        let magnitude = ((direction_x.pow(2) + direction_y.pow(2)) as f64).sqrt();
+
+        let speed_factor: f64 = 5.0;
+
+        self.dx = (direction_x as f64 / magnitude * speed_factor) as i32; // 1.0 is the speed factor
+        self.dy = (direction_y as f64 / magnitude * speed_factor) as i32;
     }
 }
 
