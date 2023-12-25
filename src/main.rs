@@ -27,11 +27,12 @@ fn main() {
 
     let mut canvas = window.into_canvas().build().unwrap();
     let mut event_pump = sdl_context.event_pump().unwrap();
+    let texture_loader = canvas.texture_creator();
 
     let mut ui = UI::new(&ttf_context);
 
     // Game objects
-    let mut player: Player = Player::new(50, 50);
+    let mut player: Player = Player::new(50, 50, &texture_loader);
     let mut key_inputs = KeyInputs::new();
     let mut enemies = Vec::new();
 
@@ -57,7 +58,6 @@ fn main() {
             }
         }
         if last_enemy_spawn_time.elapsed() >= enemy_spawn_interval {
-            // Spawn a new enemy every second
             enemies.push(Enemy::new(rand::random::<i32>() % 800, rand::random::<i32>() % 600, 1));
             last_enemy_spawn_time = Instant::now();
         }
@@ -90,7 +90,7 @@ fn main() {
             for (index, enemy) in enemies.iter().enumerate() {
                 println!("Enemy {} Health: {}", index + 1, enemy.health());
             }
-            last_print_time = Instant::now(); // Reset the timer
+            last_print_time = Instant::now();
         }
 
         Background::render(&mut canvas);

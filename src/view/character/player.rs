@@ -1,6 +1,7 @@
+use sdl2::image::LoadTexture;
 use sdl2::rect::Rect;
-use sdl2::render::Canvas;
-use sdl2::video::Window;
+use sdl2::render::{Canvas, Texture, TextureCreator};
+use sdl2::video::{Window, WindowContext};
 use sdl2::pixels::Color;
 use sdl2::keyboard::Keycode;
 use sdl2::event::Event;
@@ -8,20 +9,23 @@ use crate::view::character::Character;
 use crate::view::items::weapons::*;
 use crate::view::items::weapons::sword::Sword;
 
-pub struct Player {
+pub struct Player<'a> {
     pub rect: Rect,
+    texture: Texture<'a>,
     speed: i32,
     pub health: i32,
     pub current_weapon: Box<dyn Weapon>,
 }
 
-impl Player {
-    pub fn new(x: i32, y: i32) -> Self {
+impl<'a> Player<'a> {
+    pub fn new(x: i32, y: i32, texture_loader: &'a TextureCreator<WindowContext>) -> Self {
+        let _player_texture: Result<Texture<'_>, String> = texture_loader.load_texture("assets/img/player.png");
         Player {
-            rect: Rect::new(x, y, 25, 25),
+            rect: Rect::new(x, y, 50, 50),
             speed: 10,
             health: 10,
             current_weapon: Box::new(Sword::new()),
+            texture: _player_texture.ok().unwrap(),
         }
     }
 
@@ -42,8 +46,19 @@ impl Player {
     }
 
     pub fn render(&self, canvas: &mut Canvas<Window>) {
-        canvas.set_draw_color(Color::RGB(255, 0, 0));
-        canvas.fill_rect(self.rect).unwrap();
+        // canvas.set_draw_color(Color::RGB(255, 0, 0));
+        // canvas.fill_rect(self.rect).unwrap();
+
+        
+        let texture = &self.texture;
+        let texture_attributes = texture.query();
+        // this is an temporary atrocity to get the blue guy from the png 
+        let src_rect = Rect::new(
+            (8*texture_attributes.height/12).try_into().unwrap(),
+            (5*texture_attributes.height/8).try_into().unwrap(),
+            texture_attributes.width/12,
+            texture_attributes.height/8);
+        canvas.copy(texture,src_rect,self.rect).ok().unwrap();
         
         if let Some(weapon) = self.weapon() {
             weapon.render(canvas, self.rect.x(), self.rect.y());
@@ -83,7 +98,7 @@ impl KeyInputs {
     }
 }
 
-impl Character for Player {
+impl Character for Player<'_> {
     fn rect(&self) -> Rect {
         self.rect
     }
