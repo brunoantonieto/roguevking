@@ -7,9 +7,9 @@ use view::background::Background;
 use view::character::player::Player;
 use view::character::enemy::Enemy;
 use view::character::Character;
+use crate::view::ui::UI;
 use crate::model::collision::*;
 use std::time::{Duration, Instant};
-
 
 mod view;
 mod model;
@@ -17,6 +17,8 @@ mod model;
 fn main() {
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
+
+    let ttf_context = sdl2::ttf::init().unwrap();
 
     let window = video_subsystem.window("Viking Game", 800, 600)
         .position_centered()
@@ -26,10 +28,17 @@ fn main() {
     let mut canvas = window.into_canvas().build().unwrap();
     let mut event_pump = sdl_context.event_pump().unwrap();
 
+    let mut ui = UI::new(&ttf_context);
+
     // Game objects
     let mut player: Player = Player::new(50, 50);
     let mut key_inputs = KeyInputs::new();
     let mut enemies = Vec::new();
+
+    let mut kill_count: u32 = 0;
+    let start_time = Instant::now();
+
+    let elapsed_time = start_time.elapsed();
 
     let mut last_enemy_spawn_time = Instant::now();
     let enemy_spawn_interval = Duration::new(1, 0);
@@ -63,12 +72,18 @@ fn main() {
                         enemy.apply_damage(weapon.damage());
                         collision_occurred = true;
                         println!("collision");
+                        if enemy.health() <= 0 {
+                            kill_count += 1;
+                        }
                     }
                 }
             }
 
             enemy.check_liveness()
         }
+
+        ui.set_kill_count(kill_count);
+        ui.update_timer(start_time.elapsed());
 
         if collision_occurred && last_print_time.elapsed() >= print_interval {
             println!("Player Health: {}", player.health());
@@ -79,6 +94,7 @@ fn main() {
         }
 
         Background::render(&mut canvas);
+        ui.render(&mut canvas);
 
         player.render(&mut canvas);
 
