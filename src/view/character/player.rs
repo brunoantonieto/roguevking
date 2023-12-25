@@ -48,7 +48,7 @@ impl Player {
         canvas.fill_rect(self.rect).unwrap();
         
         if let Some(weapon) = self.weapon() {
-            weapon.render(canvas, self.rect.x()-10, self.rect.y()-15);
+            weapon.render(canvas, self.rect.x(), self.rect.y());
         }
     }
 }

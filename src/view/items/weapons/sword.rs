@@ -8,6 +8,8 @@ use sdl2::pixels::Color;
 pub struct Sword {
     pub height: u32,
     pub width: u32,
+    pub padding_x: i32,
+    pub padding_y: i32,
     pub damage: i32,
     pub color: Color,
 }
@@ -15,10 +17,12 @@ pub struct Sword {
 impl Sword {
     pub fn new() -> Self {
         Sword {
-            height: 30,
-            width: 7,
-            damage: 1,
+            height: 50,
+            width: 5,
+            padding_x: -10,
+            padding_y: -35,
             color: Color::RGB(128, 128, 128), // Gray color
+            damage: 1,
         }
     }
 }
@@ -30,11 +34,11 @@ impl Weapon for Sword {
 
     fn render(&self, canvas: &mut Canvas<Window>, x: i32, y: i32) {
         canvas.set_draw_color(self.color);
-        let sword_rect = Rect::new(x, y, self.width, self.height);
+        let sword_rect = Rect::new(x + self.padding_x, y + self.padding_y, self.width, self.height);
         canvas.fill_rect(sword_rect).expect("Could not render sword");
     }
 
     fn rect(&self, player_x: i32, player_y: i32) -> Rect {
-        Rect::new(player_x, player_y, self.width, self.height)
+        Rect::new(player_x + self.padding_x, player_y + self.padding_y, self.width, self.height)
     }
 }
