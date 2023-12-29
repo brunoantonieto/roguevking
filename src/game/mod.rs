@@ -1,14 +1,12 @@
 pub mod background;
-pub mod monster;
-mod player;
+pub mod actor;
 pub mod score;
 pub mod items;
 mod systems;
 mod ui;
 
 use background::BackgroundPlugin;
-use monster::MonsterPlugin;
-use player::PlayerPlugin;
+use actor::ActorPlugin;
 use score::ScorePlugin;
 use items::ItemsPlugin;
 use systems::*;
@@ -32,8 +30,7 @@ impl Plugin for GamePlugin {
             // .add_system(pause_simulation.in_schedule(OnEnter(AppState::Game)))
             // My Plugins
             .add_plugin(BackgroundPlugin)
-            .add_plugin(MonsterPlugin)
-            .add_plugin(PlayerPlugin)
+            .add_plugin(ActorPlugin)
             .add_plugin(ScorePlugin)
             .add_plugin(ItemsPlugin)
             .add_plugin(GameUIPlugin)

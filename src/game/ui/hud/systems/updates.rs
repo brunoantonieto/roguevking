@@ -1,4 +1,4 @@
-use crate::game::monster::components::Monster;
+use crate::game::actor::monster::components::Monster;
 use bevy::prelude::*;
 
 use crate::game::score::resources::Score;

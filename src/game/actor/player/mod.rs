@@ -3,7 +3,7 @@ mod systems;
 
 use systems::*;
 
-use super::SimulationState;
+use super::super::SimulationState;
 use crate::AppState;
 
 use bevy::prelude::*;

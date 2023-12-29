@@ -9,7 +9,7 @@ use crate::AppState;
 
 use bevy::prelude::*;
 
-use super::SimulationState;
+use super::super::SimulationState;
 
 pub const MONSTER_SIZE: f32 = 130.0; // The monster sprite is 130x130 pixels.
 pub const MONSTER_SPEED: f32 = 200.0;

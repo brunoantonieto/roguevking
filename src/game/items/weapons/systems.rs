@@ -1,4 +1,4 @@
-use crate::game::player::components::Player;
+use crate::game::actor::player::components::Player;
 // use crate::game::items::weapons::components::Weapon;
 use crate::game::items::weapons::sword::components::Sword;
 

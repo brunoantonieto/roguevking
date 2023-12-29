@@ -1,7 +1,7 @@
 use bevy::prelude::*;
 
 // use super::super::components::Weapon;
-use crate::game::player::components::Player;
+use crate::game::actor::player::components::Player;
 use crate::game::items::weapons::sword::components::Sword;
 
 pub const SWORD_SPEED: f32 = 5.0;

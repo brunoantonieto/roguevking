@@ -4,8 +4,8 @@ use bevy::window::PrimaryWindow;
 use super::components::Player;
 
 // use crate::events::GameOver;
-use crate::game::monster::components::*;
-use crate::game::monster::MONSTER_SIZE;
+use crate::game::actor::monster::components::*;
+use crate::game::actor::monster::MONSTER_SIZE;
 use crate::game::score::resources::*;
 use crate::game::items::star::components::Star;
 use crate::game::items::star::STAR_SIZE;
