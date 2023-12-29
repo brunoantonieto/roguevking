@@ -39,6 +39,6 @@ impl Plugin for MonsterPlugin {
                     .in_set(OnUpdate(SimulationState::Running)),
             )
             // Exit State Systems
-            .add_system(despawn_monsters.in_schedule(OnExit(AppState::Game)));
+            .add_system(despawn_monsters);
     }
 }

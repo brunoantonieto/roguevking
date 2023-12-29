@@ -12,10 +12,11 @@ use crate::game::items::star::STAR_SIZE;
 use crate::game::items::weapons::components::Weapon;
 use crate::game::items::weapons::components::WeaponActions;
 use crate::game::items::weapons::sword::components::Sword;
-use crate::game::items::weapons::systems::attack;
+use crate::game::items::weapons::systems::trigger_attack;
 
 pub const PLAYER_SPEED: f32 = 500.0;
 pub const PLAYER_SIZE: f32 = 64.0;
+pub const PLAYER_DEFAULT_HEALTH: i32 = 10;
 
 
 pub fn spawn_player(
@@ -31,7 +32,7 @@ pub fn spawn_player(
             texture: asset_server.load("sprites/player2.png"),
             ..default()
         },
-        Player { is_attacking: false},
+        Player { is_attacking: false, health: PLAYER_DEFAULT_HEALTH },
     )).with_children( |parent| {
         <Sword as WeaponActions>::spawn_weapon(parent, &asset_server);
     });
@@ -52,7 +53,7 @@ pub fn attack_input(
     if keyboard_input.just_pressed(KeyCode::X) {
         if let Ok(mut player) = player_query.get_single_mut() {
             if let Ok(mut weapon) = weapon_query.get_single_mut() {
-                attack(&mut player, &mut weapon)
+                trigger_attack(&mut player, &mut weapon)
             }
         }
     }
@@ -71,9 +72,9 @@ pub fn attack_animation_system(
 }
 
 pub fn player_hit_monster(
-    mut commands: Commands,
+    // mut commands: Commands,
     player_query: Query<(&Player, &Transform), With<Player>>,
-    monster_query: Query<(Entity, &Transform), With<Monster>>,
+    mut monster_query: Query<(&Transform, &mut Monster), With<Monster>>,
     // asset_server: Res<AssetServer>,
     // audio: Res<Audio>,
     // mut score: ResMut<Score>,
@@ -81,7 +82,7 @@ pub fn player_hit_monster(
     if let Ok((player, player_transform)) = player_query.get_single() {
         // i will use this later to get the sword damage
         // if let Ok(sword_transform) = sword_query.get_single() {
-            for (monster_entity, monster_transform) in monster_query.iter() {
+            for (monster_transform, mut monster) in monster_query.iter_mut() {
                 let player_position_with_offset = Vec3::new(
                     player_transform.translation.x - 20.0,
                     player_transform.translation.y,
@@ -93,10 +94,10 @@ pub fn player_hit_monster(
 
                 if player.is_attacking && distance < MONSTER_SIZE / 2.0 + PLAYER_SIZE / 2.0 {
                     println!("Player hit monster!");
-                    // score.value += 1;
+                    monster.health -= 1;
                     // let sound_effect = asset_server.load("audio/laserLarge_000.ogg");
                     // audio.play(sound_effect);
-                    commands.entity(monster_entity).despawn();
+                    // commands.entity(monster_entity).despawn();
                 }
             }
         // }

@@ -1,7 +1,7 @@
 use crate::game::actor::player::components::Player;
 use crate::game::items::weapons::components::Weapon;
 
-pub fn attack(    
+pub fn trigger_attack(    
     player: &mut Player,
     weapon: &mut Weapon,
 ) {

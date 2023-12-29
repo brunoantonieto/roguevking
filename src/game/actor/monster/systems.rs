@@ -7,6 +7,8 @@ use super::components::*;
 use super::resources::*;
 use super::{MONSTER_SIZE, MONSTER_SPEED, NUMBER_OF_MONSTERS};
 
+pub const MONSTER_HEALTH: i32 = 20;
+
 pub fn spawn_monsters(
     mut commands: Commands,
     window_query: Query<&Window, With<PrimaryWindow>>,
@@ -26,14 +28,20 @@ pub fn spawn_monsters(
             },
             Monster {
                 direction: Vec2::new(random::<f32>(), random::<f32>()).normalize(),
+                health: MONSTER_HEALTH
             },
         ));
     }
 }
 
-pub fn despawn_monsters(mut commands: Commands, monster_query: Query<Entity, With<Monster>>) {
-    for monster_entity in monster_query.iter() {
-        commands.entity(monster_entity).despawn();
+pub fn despawn_monsters(
+    mut commands: Commands,
+    monster_query: Query<(Entity, &mut Monster), With<Monster>>
+) {
+    for (monster_entity, monster) in monster_query.iter() {
+        if monster.health < 0 {
+            commands.entity(monster_entity).despawn();
+        }
     }
 }
 
@@ -143,6 +151,7 @@ pub fn spawn_monsters_over_time(
             },
             Monster {
                 direction: Vec2::new(random::<f32>(), random::<f32>()).normalize(),
+                health: MONSTER_HEALTH,
             },
         ));
     }

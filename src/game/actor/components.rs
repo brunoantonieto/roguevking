@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct Sword {
-    pub damage: i32,
+pub struct Actor {
+    pub health: i32,
 }
