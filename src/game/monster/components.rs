@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
 #[derive(Component)]
-pub struct Enemy {
+pub struct Monster {
     pub direction: Vec2,
 }

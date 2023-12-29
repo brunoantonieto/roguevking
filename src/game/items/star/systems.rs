@@ -62,7 +62,7 @@ pub fn spawn_stars_over_time(
             SpriteBundle {
                 transform: Transform::from_xyz(random_x, random_y, 0.0)
                     .with_scale(Vec3::new(scale_x, scale_y, 1.0)),
-                texture: asset_server.load("sprites/star.png"),
+                texture: asset_server.load("sprites/potion.png"),
                 ..default()
             },
             Star {},

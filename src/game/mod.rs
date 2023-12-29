@@ -1,5 +1,5 @@
 pub mod background;
-pub mod enemy;
+pub mod monster;
 mod player;
 pub mod score;
 pub mod items;
@@ -7,7 +7,7 @@ mod systems;
 mod ui;
 
 use background::BackgroundPlugin;
-use enemy::EnemyPlugin;
+use monster::MonsterPlugin;
 use player::PlayerPlugin;
 use score::ScorePlugin;
 use items::ItemsPlugin;
@@ -32,7 +32,7 @@ impl Plugin for GamePlugin {
             // .add_system(pause_simulation.in_schedule(OnEnter(AppState::Game)))
             // My Plugins
             .add_plugin(BackgroundPlugin)
-            .add_plugin(EnemyPlugin)
+            .add_plugin(MonsterPlugin)
             .add_plugin(PlayerPlugin)
             .add_plugin(ScorePlugin)
             .add_plugin(ItemsPlugin)

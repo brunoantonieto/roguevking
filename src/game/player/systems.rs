@@ -4,8 +4,8 @@ use bevy::window::PrimaryWindow;
 use super::components::Player;
 
 // use crate::events::GameOver;
-use crate::game::enemy::components::*;
-use crate::game::enemy::ENEMY_SIZE;
+use crate::game::monster::components::*;
+use crate::game::monster::MONSTER_SIZE;
 use crate::game::score::resources::*;
 use crate::game::items::star::components::Star;
 use crate::game::items::star::STAR_SIZE;
@@ -70,11 +70,11 @@ pub fn attack_animation_system(
     }
 }
 
-pub fn player_hit_enemy(
+pub fn player_hit_monster(
     mut commands: Commands,
     player_query: Query<(&Player, &Transform), With<Player>>,
     // sword_query: Query<&Transform, With<Sword>>,
-    enemy_query: Query<(Entity, &Transform), With<Enemy>>,
+    monster_query: Query<(Entity, &Transform), With<Monster>>,
     // asset_server: Res<AssetServer>,
     // audio: Res<Audio>,
     // mut score: ResMut<Score>,
@@ -82,7 +82,7 @@ pub fn player_hit_enemy(
     if let Ok((player, player_transform)) = player_query.get_single() {
         // i will use this later to get the sword damage
         // if let Ok(sword_transform) = sword_query.get_single() {
-            for (enemy_entity, enemy_transform) in enemy_query.iter() {
+            for (monster_entity, monster_transform) in monster_query.iter() {
                 let player_position_with_offset = Vec3::new(
                     player_transform.translation.x - 20.0,
                     player_transform.translation.y,
@@ -90,14 +90,14 @@ pub fn player_hit_enemy(
                 );
 
                 let distance = player_position_with_offset
-                    .distance(enemy_transform.translation);
+                    .distance(monster_transform.translation);
 
-                if player.is_attacking && distance < ENEMY_SIZE / 2.0 + PLAYER_SIZE / 2.0 {
-                    println!("Player hit enemy!");
+                if player.is_attacking && distance < MONSTER_SIZE / 2.0 + PLAYER_SIZE / 2.0 {
+                    println!("Player hit monster!");
                     // score.value += 1;
                     // let sound_effect = asset_server.load("audio/laserLarge_000.ogg");
                     // audio.play(sound_effect);
-                    commands.entity(enemy_entity).despawn();
+                    commands.entity(monster_entity).despawn();
                 }
             }
         // }

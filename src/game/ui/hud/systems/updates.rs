@@ -1,8 +1,8 @@
-use crate::game::enemy::components::Enemy;
+use crate::game::monster::components::Monster;
 use bevy::prelude::*;
 
 use crate::game::score::resources::Score;
-use crate::game::ui::hud::components::{EnemyText, ScoreText};
+use crate::game::ui::hud::components::{MonsterText, ScoreText};
 
 pub fn update_score_text(mut text_query: Query<&mut Text, With<ScoreText>>, score: Res<Score>) {
     if score.is_changed() {
@@ -12,11 +12,11 @@ pub fn update_score_text(mut text_query: Query<&mut Text, With<ScoreText>>, scor
     }
 }
 
-pub fn update_enemy_text(
-    mut text_query: Query<&mut Text, With<EnemyText>>,
-    enemy_query: Query<Entity, With<Enemy>>,
+pub fn update_monster_text(
+    mut text_query: Query<&mut Text, With<MonsterText>>,
+    monster_query: Query<Entity, With<Monster>>,
 ) {
-    let count = enemy_query.iter().count();
+    let count = monster_query.iter().count();
     for mut text in text_query.iter_mut() {
         text.sections[0].value = format!("{}", count.to_string());
     }

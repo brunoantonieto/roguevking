@@ -33,13 +33,13 @@ impl Plugin for PlayerPlugin {
                     .in_set(OnUpdate(SimulationState::Running)),
             )
             // .add_systems(
-            //     (enemy_hit_player, player_hit_star)
+            //     (monster_hit_player, player_hit_star)
             //         .in_set(OnUpdate(AppState::Game))
             //         .in_set(OnUpdate(SimulationState::Running)),
             // )
             .add_system(attack_input)
             .add_system(attack_animation_system)
-            .add_system(player_hit_enemy)
+            .add_system(player_hit_monster)
             .add_system(
                 (player_hit_star)
                     .in_set(OnUpdate(AppState::Game))
