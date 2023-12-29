@@ -9,9 +9,9 @@ use crate::game::actor::monster::MONSTER_SIZE;
 use crate::game::score::resources::*;
 use crate::game::items::star::components::Star;
 use crate::game::items::star::STAR_SIZE;
+use crate::game::items::weapons::components::Weapon;
+use crate::game::items::weapons::components::WeaponActions;
 use crate::game::items::weapons::sword::components::Sword;
-use crate::game::items::weapons::sword::systems::spawn_sword;
-use crate::game::items::weapons::sword::systems::attack_animation;
 use crate::game::items::weapons::systems::attack;
 
 pub const PLAYER_SPEED: f32 = 500.0;
@@ -33,7 +33,7 @@ pub fn spawn_player(
         },
         Player { is_attacking: false},
     )).with_children( |parent| {
-        spawn_sword(parent, &asset_server);
+        <Sword as WeaponActions>::spawn_weapon(parent, &asset_server);
     });
 }
 
@@ -46,13 +46,13 @@ pub fn despawn_player(mut commands: Commands, player_query: Query<Entity, With<P
 
 pub fn attack_input(
     keyboard_input: Res<Input<KeyCode>>,
-    mut sword_query: Query<&mut Sword, With<Sword>>,
+    mut weapon_query: Query<&mut Weapon, With<Weapon>>,
     mut player_query: Query<&mut Player, With<Player>>   
 ) {
     if keyboard_input.just_pressed(KeyCode::X) {
         if let Ok(mut player) = player_query.get_single_mut() {
-            if let Ok(mut sword) = sword_query.get_single_mut() {
-                attack(&mut player, &mut sword)
+            if let Ok(mut weapon) = weapon_query.get_single_mut() {
+                attack(&mut player, &mut weapon)
             }
         }
     }
@@ -60,12 +60,12 @@ pub fn attack_input(
 
 pub fn attack_animation_system(
     time: Res<Time>,
-    mut sword_query: Query<(&mut Sword, &mut Transform), With<Sword>>,
+    mut weapon_query: Query<(&mut Weapon, &mut Transform), With<Weapon>>,
     mut player_query: Query<&mut Player, With<Player>>
 ) {
     if let Ok(mut player) = player_query.get_single_mut() {
-        if let Ok((mut sword, mut sword_transform)) = sword_query.get_single_mut() {
-            attack_animation(&mut player, &mut sword, &mut sword_transform, time);
+        if let Ok((mut weapon, mut weapon_transform)) = weapon_query.get_single_mut() {
+            <Sword as WeaponActions>::weapon_animation(&mut player, &mut weapon, &mut weapon_transform, time);
         }
     }
 }
@@ -73,7 +73,6 @@ pub fn attack_animation_system(
 pub fn player_hit_monster(
     mut commands: Commands,
     player_query: Query<(&Player, &Transform), With<Player>>,
-    // sword_query: Query<&Transform, With<Sword>>,
     monster_query: Query<(Entity, &Transform), With<Monster>>,
     // asset_server: Res<AssetServer>,
     // audio: Res<Audio>,
