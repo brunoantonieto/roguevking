@@ -2,7 +2,7 @@
 A rogue-like game writen in Rust.
 
 ## Roadmap to alpha
-Basic stuff should be working in order to have a mvp, by priority:
+Basic stuff that should be worked out in order to have a mvp, by priority:
 - Collision Handler
 must fix the collision handler, there's a bug where the pngs do not exactly matches the collision rects
 - Sprites
